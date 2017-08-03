@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <script type="text/javascript" src="js/jquery.min.js"></script>
+    </head>
+    <style type="text/css">
+    *{
+        margin: 0;
+        padding: 0;
+    }
+    img{
+        border:0;
+    }
+    ol, ul ,li{list-style: none;} 
+    .container{
+        width: 50%;
+        height: 500px;
+        margin:0 auto;
+    }
+    body{
+        font-family: '微软雅黑';
+    }
+        .searchNum{
+            width: 80%;
+            height: 30px;
+            float: left;
+            outline: none;
+            border:1px solid #eb6818;
+            border-radius: 5px;
+            padding-left: 10px;
+            font-size: 12px;
+            color:blue;
+            margin-top: 20px;
+        }
+        .search{
+            width: 18%;
+            height: 30px;
+            float: left;
+            outline: none;
+            border:1px solid #eb6818;
+            border-radius: 5px;
+            font-size: 12px;
+            color:blue;
+            cursor: pointer;
+            margin-top: 20px;
+            background: grey;
+
+        }
+        table{
+            width: 100%;
+            float:left;
+            margin-top: 20px;
+        }
+        td{
+            /*width: 50%;*/
+            height: 50px;
+            text-align: center;
+        }
+        .city{
+            color:pink;
+        }
+        .cityNum{
+            color:pink;
+        }
+    </style>
+    <body>
+    <div class="container">
+        <input type="text" class="searchNum" id="searchNum" maxlength="11" />
+        <button class="search">搜索</button>
+        <table border="1" cellpadding="0" cellspacing="0">
+            <tr>
+                <th>说明</th>
+                <th>归属地</th>
+            </tr>
+            <tr>
+                <td>归属地</td>
+                <td class="city"></td>
+            </tr>
+            <tr>
+                <td>运营商</td>
+                <td class="cityNum"></td>
+            </tr>
+            <tr>
+                <td>邮政编码</td>
+                <td class="postCode"></td>
+            </tr>
+            <tr>
+                <td>惊喜大奖</td>
+                <td class="myname"></td>
+            </tr>
+        </table> 
+    </div> 
+    </body>
+</html>
+<script type="text/javascript">
+function checkMobile(){ 
+    var sMobile = document.getElementById('searchNum').value 
+    if(!(/^1[3|5][0-9]\d{4,8}$/.test(sMobile))){ 
+        alert("不是完整的11位手机号或者正确的手机号前七位"); 
+        return false; 
+    } 
+}
+var urlNn;
+var urlN='http://route.showapi.com/6-1?showapi_appid=43139&showapi_sign=6615e908ceed4a7483146290ae8bc4ea&num='
+$('.searchNum').blur(function(){
+    var valPhone= $('.searchNum').val()
+    checkMobile()
+
+    $('.search').click(function(){
+
+         urlNn= urlN+valPhone
+         $.ajax({
+            url: urlNn,
+            type: 'post',
+            dataType: 'json',
+            jsonp:'callback',
+            data: '',
+        })
+        .done(function(res) {
+             console.log(res)
+             $('.city').html(res.showapi_res_body.city)
+             $('.cityNum').html(res.showapi_res_body.name)
+             $('.postCode').html(res.showapi_res_body.postCode)
+
+            console.log(res.showapi_res_body.city);
+            if(valPhone==15179591619){
+                    $('.myname').html('此号码是全世界最帅楼主的！')
+               }else{
+                    $('.myname').html('此号码不是楼主的！')
+               }
+        })
+        .fail(function() {
+            console.log("error");
+        })
+        .always(function() {
+            console.log("complete");
+        });  
+
+    })
+    
+
+})  
+
+
+
+
+
+
+
+</script>
